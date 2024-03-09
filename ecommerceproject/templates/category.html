@@ -1,0 +1,79 @@
+{% extends 'base.html'%} 
+
+{% load static %}
+{% block metadescription %}
+    {% if category %}
+        {{ category.description|truncatewords:155 }}
+    {% else %}
+Welcome to K store where you can buy different items..
+    {% endif %}
+{% endblock %}
+
+{% block title %}
+    {%if category %}
+        {{category.name}}-K store
+    {% else %}
+        See our new Collections in K store
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+ {% if category %} 
+<div>
+ <div class='row my_row'>
+    <div class='mx-auto'>
+        <p> <a href="{% url 'ecommerceapp:allproductscat' %}">Our product collections</a> </p> 
+    </div> 
+    </div>
+    {% endif %} 
+<div class='mx-auto'>
+    {% if category %}
+    <img class='my_image' src="{{category.image.url}}" alt=" {{category.name}}" width=350px;height=550px>
+</div>
+    <br>
+<div>
+        <h1 class='text-center my_title' >{{category.name}}</h1>
+        <p class='text-justify'>{{category.description}}</p>
+</div>
+    {% else %}
+<div>
+    <img class='my_image padding' src="{%static 'img/banner.jpg'%}" alt="our products" width=1250px; height=550px;>
+</div>
+    <br>
+<div>
+        <h1 class='text-center my_title'>Our products collections</h1>
+        <p class='text-justify'>Dummy text refers to the bits of content that are used to fill a website mock-up. This text helps web designers better envision how the website will look as a finished product. It is important to understand that dummy text has no meaning whatsoever. Its sole purpose is to fill out blank spaces with “word-like” content, without making any copyright infringements.
+Dummy text is also known as filler text or placeholder text, and it has been used for a long time in the various fields of online publishing</p>
+</div>
+{% endif%} 
+<div class='container'>
+    <div class='row mx_auto'>
+        {% for products in product.object_list %}
+        <div class='my_bottom_margin col-9 col-sm-12  col-md-4 col-lg-4' >
+            <div class='card text-center' style='min-width:18rem'>
+            <a href="{{ products.get_url }}"> <img class='card-img-top ' src="{{ products.image.url }}" alt="{{products.name }}" width= 350px height= 450px;> </a>
+
+            <div class='card-body'>
+                <h4>{{ products.name }}</h4>
+                <p>{{ products.price }}</p>
+            </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class='mx-auto'>
+        {% if product.paginator.num_pages > 1 %}
+        <hr>
+       
+        <div class='text-center'>
+            {% for p in product.paginator.page_range %}
+            <a href='?page={{ p }}' class='btn btn-light btn-sm {% if product.number == p %} active {% endif %}'> {{ p }} </a>
+           {% endfor %}
+       </div>
+        
+       {% endif %}
+    </div>
+    <br>
+</div>
+
+{% endblock %}
